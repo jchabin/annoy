@@ -90,7 +90,8 @@
 			
 			var database = firebase.database();
 			
-			var mobile = navigator.userAgent.match("Mobile")!=null||navigator.userAgent.match("Linux;")!=null;
+			var mobile = navigator.userAgent.match("Mobile")!=null||navigator.userAgent.match("Linux;")!=null||navigator.userAgent.match("iPhone")!=null||navigator.userAgent.match("Snapchat")!=null;
+
 			var ignore = true;
 			if(mobile){
 				document.getElementById("pc").outerHTML = "";
