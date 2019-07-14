@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto" />
+		<style>
+			*{
+				text-align: center;
+				font-family: Roboto;
+				margin: 0;
+				padding: 0;
+			}
+			h1{
+				font-size: 10vmin;
+				margin: 3vmin;
+			}
+			textarea{
+				margin: 3vmin;
+				font-size: 5vmin;
+				width: 80vw;
+				border: 1px solid black;
+				text-align: left;
+				padding: 1vmin;
+				height: calc(100vh - 55vmin);
+			}
+			#send{
+				margin: 3vmin;
+				font-size: 10vmin;
+				color: white;
+				background: #ff4040;
+				display: inline-block;
+				padding: 2vmin;
+				border-radius: 5vmin;
+				cursor: pointer;
+			}
+			#thabks{
+				line-height: 100vh;
+				height: 100vh;
+				width: 100vw;
+				position: fixed;
+				top: 0;
+				left: 0;
+				text-align: center;
+				font-size: 20vmin;
+				background: white;
+				display: none;
+			}
+			#again{
+				font-size: 10vmin;
+				color: white;
+				background: #ff4040;
+				display: inline-block;
+				padding: 2vmin;
+				border-radius: 5vmin;
+				cursor: pointer;
+				line-height: 10vmin;
+				position: relative;
+				top: -80vh;
+			}
+		</style>
+		<title>johnny</title>
+	</head>
+	<body>
+		<div id="pc">
+			<h1 id="disp">welcome to hell!</h1>
+		</div>
+		<div id="mobile">
+			<h1>Johnny!</h1>
+			<textarea id="text" placeholder="Write a message here!"></textarea>
+			<br/>
+			<div id="send" onclick="send()">send</div>
+		</div>
+		<div id="thabks">
+			thabks.
+			<br/>
+			<div id="again" onclick="again()">another one</div>
+		</div>
+		<script>
+			var firebaseConfig = {
+				apiKey: "AIzaSyBCeTVF1RvVNAefmETbBgLOv6lN0btN0q8",
+				authDomain: "online-stuff-3e092.firebaseapp.com",
+				databaseURL: "https://online-stuff-3e092.firebaseio.com",
+				projectId: "online-stuff-3e092",
+				storageBucket: "online-stuff-3e092.appspot.com",
+				messagingSenderId: "878238554342",
+				appId: "1:878238554342:web:971978c3d19a7342"
+			};
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+			
+			var database = firebase.database();
+			
+			var mobile = navigator.userAgent.match("Mobile")!=null||navigator.userAgent.match("Linux;")!=null;
+			var ignore = true;
+			if(mobile){
+				document.getElementById("pc").outerHTML = "";
+			}else{
+				document.getElementById("mobile").outerHTML = "";
+				database.ref("annoy").on("value", function(e){
+					if(ignore){
+						ignore = false;
+						return;
+					}
+					var val = e.val().text;
+					val = val.substring(0, 144);
+					console.log(val);
+					document.getElementById("disp").innerHTML = val;
+					var msg = new SpeechSynthesisUtterance(val);
+					window.speechSynthesis.speak(msg);
+				});
+			}
+			
+			function send(){
+				var text = document.getElementById("text").value;
+				database.ref("annoy").set({text: text, r: Math.random()});
+				document.getElementById("thabks").style.display = "block";
+			}
+			function again(){
+				document.getElementById("thabks").style.display = "none";
+				document.getElementById("text").value = "";
+			}
+		</script>
+	</body>
+</html>
